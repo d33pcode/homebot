@@ -1,10 +1,10 @@
 import yaml
 import logging
 
-def get_logger():
+def get_logger(fname='bot.log'):
     log = logging.getLogger('homebot')
     log.setLevel(logging.DEBUG)
-    fh = logging.FileHandler('bot.log')
+    fh = logging.FileHandler(fname)
     fh.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
