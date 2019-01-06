@@ -1,0 +1,7 @@
+bot:
+    key: 123456789
+    secret: qwertyuiopasdfghjklzxcvbnm
+logging:
+    filename: 'bot.log'
+
+download_dir: ./downloads/
