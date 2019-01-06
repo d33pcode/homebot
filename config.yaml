@@ -1,0 +1,7 @@
+bot:
+    key: 346659556
+    secret: AAHJmpdZ4eN5inoKug_WOnvJFjZ0XApLDGQ
+logging:
+    path: './log/bot.log'
+
+download_dir: ./downloads/
