@@ -4,9 +4,10 @@ import logging
 import os
 import time
 
-import telepot
+import yaml
 
-import dispatcher
+import telepot
+from botlib import dispatcher, utils
 
 
 def handle(msg):
@@ -38,28 +39,17 @@ def handle(msg):
         homebot.sendMessage(chat_id, 'Download completed.')
 
 
-my_id = 5778849
-downloads_dir = './downloads/'
-homebot = telepot.Bot('346659556:AAHJmpdZ4eN5inoKug_WOnvJFjZ0XApLDGQ')
-# logging.basicConfig(level=logging.DEBUG,
-#                     format='[%(asctime)s] %(levelname)s:\t %(message)s',
-#                     filename='bot.log')
+conf = utils.get_config()
 
+# my_id = 5778849
+downloads_dir = conf.get('download_dir')
+botconf = conf.get('bot', {})
+homebot = telepot.Bot('{k}:{s}'.format(k=botconf.get('key'),
+                                       s=botconf.get('secret')))
 
-log = logging.getLogger('homebot')
-log.setLevel(logging.DEBUG)
-fh = logging.FileHandler('bot.log')
-fh.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-formatter = logging.Formatter('[%(asctime)s] %(levelname)s:\t %(message)s')
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
-log.addHandler(fh)
-log.addHandler(ch)
+log = utils.get_logger()
 
-
-homebot.sendMessage(my_id, 'homebot started.')
+# homebot.sendMessage(my_id, 'homebot started.')
 homebot.message_loop(handle)
 log.info('I am listening ...')
 while 1:
