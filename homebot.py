@@ -48,7 +48,7 @@ homebot = telepot.Bot('{k}:{s}'.format(k=botconf.get('key'),
                                        s=botconf.get('secret')))
 
 logconf = conf.get('logging', {})
-log = utils.get_logger(logconf.get(fname, 'bot.log'))
+log = utils.get_logger(logconf.get('filename', 'bot.log'))
 
 # homebot.sendMessage(my_id, 'homebot started.')
 homebot.message_loop(handle)

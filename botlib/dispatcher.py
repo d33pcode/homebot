@@ -5,7 +5,7 @@ import pydoc
 
 def ping():
     """Ping the bot."""
-    return '`PONG`'
+    return 'PONG'
 
 
 def help_message(command=None):
