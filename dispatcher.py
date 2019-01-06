@@ -1,40 +1,59 @@
 import datetime
 import random
 import subprocess
-
+import pydoc
 
 def ping():
-    return 'PONG'
+    """Ping the bot."""
+    return '`PONG`'
 
-def help_message():
+
+def help_message(command=None):
+    """Print the help message."""
+    if command:
+        if command in cmap:
+            return command + ':\n' + ''.join(pydoc.render_doc(cmap[command]).splitlines()[3:])
+        else:
+            return not_found()
     return "Command list:\n" + ''.join([c + '\n' for c in cmap])
 
+
 def not_found():
-    return "Command not found.\nType help for a command list."
-
-
-def echo_date():
-    return datetime.datetime.now()
-
-
-def roll_dice():
-    return random.randint(1, 6)
+    return "Command not found.\nType __help__ for a command list."
 
 
 def uptime():
-    p = subprocess.Popen(['uptime'], stdout=subprocess.PIPE)
+    """Print the current server's uptime."""
+    return run_proc(['uptime'])
+
+
+def get_ip():
+    """Return the current IP address of the server."""
+    return run_proc(['curl', 'ifconfig.co'])
+
+
+def run_proc(command):
+    """
+    runs a command as a subprocess.
+
+    :param command: a list containing the command and its args
+    :return: the command output
+    """
+    p = subprocess.Popen(command, stdout=subprocess.PIPE)
     out, err = p.communicate()
-    return out
+    if err:
+        logging.err(err)
+    return out.decode('utf-8').replace('\n', chr(10))
 
 
-cmap = {
-    'help': help_message,
-    '/roll': roll_dice,
-    '/time': echo_date,
-    'ping': ping,
-    'uptime': uptime,
-}
+cmap = {'help': help_message,
+        'ping': ping,
+        'uptime': uptime,
+        'ip': get_ip}
 
-
-def dispatch(c):
-    return cmap[c]() if c in cmap else not_found()
+def dispatch(command):
+    clist = command.split()
+    if len(clist) > 1:
+        return cmap.get(clist[0], help_message)(*clist[1:]) # call function in cmap with arguments
+    else:
+        return cmap.get(command, help_message)()
